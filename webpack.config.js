@@ -1,6 +1,7 @@
 const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const MiniCSSExtract = require('mini-css-extract-plugin');
+const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const indextInput = "./src/index.html";
 const indexOutput = "index.html";
 const basePath = __dirname;
@@ -24,10 +25,13 @@ const webpackInitConfig = {
         exclude: /node_modules/,
         use: ["babel-loader"],
       },
-      {
-        test: /\.css/,
-        exclude: /node_modules/,
-        use: ["style-loader", "css-loader"],
+      { 
+        test: /\.scss$/, 
+        loader: [
+          MiniCSSExtractPlugin.loader,
+          "css-loader",
+          "sass-loader"
+        ]
       },
       {
         test: /\.css/,
@@ -45,6 +49,9 @@ const webpackInitConfig = {
         filename: '[name].css',
         chunkFilename: '[id].css',
       }),
+     new MiniCSSExtractPlugin({
+        filename: "./src/style.css",
+      })
   ],
 };
 module.exports = webpackInitConfig;
