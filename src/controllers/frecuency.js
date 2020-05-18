@@ -2,34 +2,57 @@ import * as echarts from "echarts";
 
 // include bar chart
 
-const frecuencyLetterEN = {
-  a: 8.497,
-  b: 1.492,
-  c: 2.202,
-  d: 4.253,
-  e: 11.162,
-  f: 2.228,
-  g: 2.015,
-  h: 6.094,
+export const frecuencyLetterEN = {
+  e: 11.162,//8
+  t: 9.356,//;
+  a: 8.497,//
+  r: 7.587,//)
   i: 7.546,
-  j: 0.153,
-  k: 1.292,
-  l: 4.025,
-  m: 2.406,
-  n: 6.749,
   o: 7.507,
-  p: 1.929,
-  q: 0.095,
-  r: 7.587,
+  n: 6.749,
   s: 6.327,
-  t: 9.356,
+  h: 6.094,//4
+  d: 4.253,
+  l: 4.025,
   u: 2.758,
-  v: 0.978,
   w: 2.56,
-  x: 0.15,
+  m: 2.406,
+  f: 2.228,
+  c: 2.202,
+  g: 2.015,
   y: 1.99,
-  z: 0.077,
+  b: 1.492,
+  p: 1.929,
+  k: 1.292,
+  v: 0.978,
+  j: 0.153,
+  x: 0.15,
+  q: 0.095,
 };
+
+
+/*
+*/
+// 8: 16.256157635467982
+// ;: 12.31527093596059
+// 4: 9.35960591133005
+// ): 7.8817733990147785
+// <: 7.8817733990147785
+// *: 6.403940886699507
+// 5: 5.911330049261084
+// 6: 5.41871921182266
+// (: 4.926108374384237
+// 1: 3.9408866995073892
+// >: 3.9408866995073892
+// 0: 2.955665024630542
+// 2: 2.4630541871921183
+// 9: 2.4630541871921183
+// 3: 1.9704433497536946
+// ?: 1.477832512315271
+// :: 1.9704433497536946
+// -: 0.49261083743842365
+// &: 0.9852216748768473
+// .: 0.9852216748768473
 
 export const getFrecuencyOfText = (text) => {
   if (text) {
@@ -40,6 +63,7 @@ export const getFrecuencyOfText = (text) => {
       return object;
     }, {});
     generateGrapghicCount(letters);
+ console.log("letters ", letters);
     return Object.keys(letters).reduce((object, key) => {
       object[key] = Number((100 / length) * letters[key]);
       return object;
@@ -47,10 +71,6 @@ export const getFrecuencyOfText = (text) => {
   } else {
     return null;
   }
-};
-
-export const firsConvertion = (letters) => {
-  let counter = 0;
 };
 
 function generateGrapghicCount(lettersCount) {
@@ -64,7 +84,13 @@ function generateGrapghicCount(lettersCount) {
     value: lettersCount[key],
     name: key,
   }));
-  var dataShadow = Array.from(Object.keys(lettersCount), () => Math.max(data));
+
+  var dataShadow = Array.from(Object.keys(lettersCount), () =>
+    Math.max.apply(
+      null,
+      data.map((element) => element.value)
+    )
+  );
 
   let option = {
     title: {
@@ -147,7 +173,6 @@ function generateGrapghicCount(lettersCount) {
   myChart.setOption(option);
   var zoomSize = 6;
   myChart.on("click", function (params) {
-    console.log(dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)]);
     myChart.dispatchAction({
       type: "dataZoom",
       startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
